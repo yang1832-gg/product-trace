@@ -110,7 +110,6 @@ def write_site_data(
         token = record["token"]
         shards[token[:2]][token] = {
             "code": record["code"],
-            "time": record["time"],
             "batch": record["batch"],
         }
 
