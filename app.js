@@ -2,10 +2,10 @@ const ASSETS = "./assets";
 const IS_LOCAL = ["127.0.0.1", "localhost"].includes(window.location.hostname);
 const PRODUCT_VIDEO_URL = IS_LOCAL
   ? `${ASSETS}/videos/brand.mp4`
-  : "https://github.com/yang1832-gg/yuntianhua-pages/releases/download/v1.0.0/brand.mp4";
+  : "https://github.com/yang1832-gg/product-trace/releases/download/media-v1/brand.mp4";
 const ENTERPRISE_VIDEO_URL = IS_LOCAL
   ? `${ASSETS}/videos/enterprise.mp4`
-  : "https://github.com/yang1832-gg/yuntianhua-pages/releases/download/v2.0.0/enterprise.mp4";
+  : "https://github.com/yang1832-gg/product-trace/releases/download/media-v1/enterprise.mp4";
 
 const PRODUCT = {
   brand: "白鹇",

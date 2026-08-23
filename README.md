@@ -24,9 +24,8 @@ https://<用户名>.github.io/<仓库名>/
 - 两个可点击的视频播放器
 - 手机与桌面响应式布局
 
-视频文件超过 GitHub 网页仓库上传的 25MB 限制，因此发布时将
-`assets/videos/brand.mp4` 上传为仓库 `v1.0.0` Release 的 `brand.mp4` 附件。
-本地预览继续读取本地视频，GitHub Pages 会自动读取 Release 附件。
+视频文件存放在当前仓库的 `media-v1` Release 中。GitHub Pages 从 Release
+读取 `enterprise.mp4` 和 `brand.mp4`，本地预览继续读取本地视频文件。
 
 反馈和预报名没有连接官方后端，不会向官方服务器提交数据。
 
