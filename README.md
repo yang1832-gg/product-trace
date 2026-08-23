@@ -24,8 +24,8 @@ https://<用户名>.github.io/<仓库名>/
 - 两个可点击的视频播放器
 - 手机与桌面响应式布局
 
-视频文件存放在当前仓库的 `media-v1` Release 中。GitHub Pages 从 Release
-读取 `enterprise.mp4` 和 `brand.mp4`，本地预览继续读取本地视频文件。
+视频文件随静态站点发布在 `assets/videos/` 下，本地预览与 GitHub Pages
+均从网页同域读取，避免移动端扫码浏览器因 Release 跨域跳转而加载失败。
 
 反馈和预报名没有连接官方后端，不会向官方服务器提交数据。
 
