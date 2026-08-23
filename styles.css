@@ -95,52 +95,135 @@ video {
 }
 
 .system-zone {
+  position: relative;
+  padding: 0 0 42px;
+  background: var(--page);
+}
+
+.system-zone::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 420px;
   background: var(--blue);
-  padding: 0 0 16px;
 }
 
 .system-zone__inner {
+  position: relative;
+  z-index: 1;
   width: 92%;
   max-width: 1165px;
   margin: 0 auto;
-  padding: 126px 0 0;
+  padding: 80px 0 0;
 }
 
 .system-title {
-  margin: 0 0 48px;
+  margin: 0 0 28px;
   text-align: center;
   color: var(--white);
   font-size: 24px;
   font-weight: 700;
 }
 
+.authentication-status {
+  margin: 0 auto 30px;
+  color: var(--amber);
+  text-align: center;
+  font-size: 21px;
+  line-height: 1.55;
+}
+
+.authentication-status p {
+  margin: 0;
+}
+
+.authentication-status__code {
+  margin-bottom: 4px !important;
+  font-size: 27px;
+}
+
+.authentication-status--error {
+  max-width: 680px;
+  padding: 18px 22px;
+  color: #fff;
+  background: rgba(112, 22, 22, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+}
+
+.authentication-status__headline {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.record-loading {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 16px;
+  color: #555;
+  background: var(--page);
+}
+
+.record-loading p {
+  margin: 0;
+}
+
+.record-loading__spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #cfd7df;
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: record-loading-spin 0.8s linear infinite;
+}
+
+@keyframes record-loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record-loading__spinner {
+    animation: none;
+  }
+}
+
 .product-summary {
-  min-height: 102px;
-  margin-bottom: 50px;
-  padding: 24px 28px;
-  display: flex;
+  min-height: 410px;
+  margin: 0;
+  padding: 38px;
+  display: grid;
+  grid-template-columns: minmax(250px, 34%) 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  gap: 54px;
   background: var(--white);
   border-radius: 12px;
   box-shadow: 0 10px 10px rgba(166, 166, 166, 0.2);
 }
 
-.product-summary__copy {
+.product-summary__media,
+.product-summary__details {
   min-width: 0;
 }
 
-.product-summary__name {
-  margin: 0 0 6px;
-  font-size: 19px;
-  font-weight: 700;
+.product-summary__media img {
+  width: 100%;
+  max-height: 390px;
+  object-fit: contain;
 }
 
-.product-summary__hint {
-  margin: 0;
-  color: var(--muted);
-  font-size: 15px;
+.product-summary__details {
+  font-size: 21px;
+  line-height: 1.5;
+}
+
+.product-summary__details p {
+  margin: 4px 0;
+}
+
+.product-summary__technical {
+  overflow-wrap: anywhere;
 }
 
 .text-link {
@@ -150,6 +233,12 @@ video {
   background: transparent;
   text-decoration: none;
   font-weight: 700;
+}
+
+.feature-wrap {
+  width: 84%;
+  max-width: 1064px;
+  margin: 0 auto;
 }
 
 .feature-button {
@@ -215,43 +304,6 @@ video {
   right: 0;
   bottom: 0;
   width: 30%;
-}
-
-.inquiry-button {
-  width: 100%;
-  min-height: 254px;
-  margin-bottom: 130px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 130px;
-  border-radius: 12px;
-  color: var(--white);
-  background: linear-gradient(to bottom right, #1a6bc8, #3f97fd);
-}
-
-.inquiry-button__text {
-  font-size: 58px;
-  font-weight: 700;
-}
-
-.search-mark {
-  position: relative;
-  width: 154px;
-  height: 126px;
-  border: 18px solid currentColor;
-}
-
-.search-mark::after {
-  content: "";
-  position: absolute;
-  right: -41px;
-  bottom: -36px;
-  width: 60px;
-  height: 18px;
-  background: currentColor;
-  transform: rotate(45deg);
-  transform-origin: right center;
 }
 
 .section-heading {
@@ -419,35 +471,75 @@ video {
 }
 
 .product-page__banner {
+  display: block;
   width: 100%;
 }
 
 .product-info {
-  width: 80%;
-  margin: 60px auto;
-  padding: 34px;
+  width: min(100%, 960px);
+  margin: 0 auto;
+  padding: 36px 40px 90px;
   background: #fff;
-  border-top: 4px solid var(--blue);
+}
+
+.product-info__field {
+  margin-bottom: 26px;
 }
 
 .product-info h2 {
-  margin: 0 0 24px;
+  margin: 0 0 10px;
+  color: #080808;
   font-size: 24px;
-}
-
-.product-info dl {
-  display: grid;
-  grid-template-columns: 130px 1fr;
-  gap: 18px 12px;
-  margin: 0;
-}
-
-.product-info dt {
   font-weight: 700;
+  line-height: 1.35;
 }
 
-.product-info dd {
+.product-info p {
   margin: 0;
+  color: #888;
+  font-size: 21px;
+  line-height: 1.8;
+}
+
+.product-info__section {
+  margin-top: 28px;
+}
+
+.product-info__section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-info__section p {
+  margin: 10px 0;
+}
+
+.product-info__icon {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.product-info__icon--advice {
+  color: #0cb7d6;
+}
+
+.product-info__icon--other {
+  color: #52c87a;
+}
+
+.product-info .feedback-button {
+  width: 84%;
+  min-height: 70px;
+  margin: 78px auto 0;
+  border-radius: 999px;
+  font-size: 22px;
 }
 
 .feedback-button,
@@ -471,13 +563,6 @@ video {
   margin: 70px 0 45px;
   text-align: center;
   font-size: 58px;
-}
-
-.trace-code-label {
-  margin: 0 0 48px;
-  color: var(--amber);
-  text-align: center;
-  font-size: 36px;
 }
 
 .form-panel {
@@ -772,23 +857,68 @@ video {
     padding-top: 42px;
   }
 
+  .system-zone {
+    padding-bottom: 28px;
+  }
+
+  .system-zone::before {
+    height: 235px;
+  }
+
   .system-title {
-    margin-bottom: 24px;
-    font-size: 19px;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .authentication-status {
+    margin-bottom: 22px;
+    font-size: 15px;
+    line-height: 1.42;
+  }
+
+  .authentication-status__code {
+    font-size: 17px;
+  }
+
+  .authentication-status--error {
+    padding: 14px 16px;
+  }
+
+  .authentication-status__headline {
+    font-size: 18px;
   }
 
   .product-summary {
-    min-height: 82px;
-    margin-bottom: 22px;
-    padding: 16px;
+    min-height: 0;
+    padding: 18px 16px;
+    grid-template-columns: minmax(112px, 38%) 1fr;
+    align-items: center;
+    gap: 14px;
+    border-radius: 6px;
   }
 
-  .product-summary__name {
-    font-size: 16px;
+  .product-summary__media img {
+    max-height: 255px;
   }
 
-  .product-summary__hint {
+  .product-summary__details {
     font-size: 13px;
+    line-height: 1.38;
+  }
+
+  .product-summary__details p {
+    margin: 3px 0;
+  }
+
+  .product-summary .text-link {
+    padding: 4px 0 0;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .feature-wrap {
+    width: 84%;
+    margin-top: 8px;
   }
 
   .feature-button {
@@ -817,30 +947,6 @@ video {
     width: 80%;
     font-size: 18px;
     line-height: 1.55;
-  }
-
-  .inquiry-button {
-    min-height: 102px;
-    margin-bottom: 58px;
-    gap: 34px;
-    border-radius: 6px;
-  }
-
-  .inquiry-button__text {
-    font-size: 27px;
-  }
-
-  .search-mark {
-    width: 58px;
-    height: 49px;
-    border-width: 8px;
-  }
-
-  .search-mark::after {
-    right: -20px;
-    bottom: -17px;
-    width: 27px;
-    height: 8px;
   }
 
   .section-heading {
@@ -911,29 +1017,51 @@ video {
   }
 
   .product-info {
-    width: 88%;
-    margin: 32px auto;
-    padding: 22px;
+    width: 100%;
+    padding: 20px 16px 58px;
   }
 
-  .product-info dl {
-    grid-template-columns: 96px 1fr;
-    font-size: 14px;
+  .product-info__field {
+    margin-bottom: 19px;
   }
 
-  .feedback-button {
-    min-height: 58px;
-    margin-bottom: 60px;
+  .product-info h2 {
+    margin-bottom: 8px;
+    font-size: 18px;
+  }
+
+  .product-info p {
+    font-size: 17px;
+    line-height: 1.78;
+  }
+
+  .product-info__section {
+    margin-top: 20px;
+  }
+
+  .product-info__section h2 {
+    gap: 6px;
+  }
+
+  .product-info__section p {
+    margin: 8px 0;
+  }
+
+  .product-info__icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .product-info .feedback-button {
+    width: 84%;
+    min-height: 48px;
+    margin-top: 48px;
+    font-size: 17px;
   }
 
   .page-title-large {
     margin: 42px 0 26px;
     font-size: 38px;
-  }
-
-  .trace-code-label {
-    margin-bottom: 30px;
-    font-size: 24px;
   }
 
   .field {

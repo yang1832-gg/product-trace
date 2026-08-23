@@ -20,7 +20,7 @@ https://<用户名>.github.io/<仓库名>/
 
 - 首页、产品详情、作物种植方案、二维码群聊页面
 - 高考助力活动规则和本地预报名表单校验
-- 真伪查询和反馈表单的前端演示校验
+- 反馈表单的前端演示校验
 - 两个可点击的视频播放器
 - 手机与桌面响应式布局
 
@@ -28,4 +28,19 @@ https://<用户名>.github.io/<仓库名>/
 `assets/videos/brand.mp4` 上传为仓库 `v1.0.0` Release 的 `brand.mp4` 附件。
 本地预览继续读取本地视频，GitHub Pages 会自动读取 Release 附件。
 
-真伪查询、反馈和预报名没有连接官方后端，不会向官方服务器提交数据。
+反馈和预报名没有连接官方后端，不会向官方服务器提交数据。
+
+## 静态二维码记录
+
+计划使用的中性 GitHub Pages 地址为：
+
+```text
+https://yang1832-gg.github.io/product-trace/
+```
+
+二维码链接使用 `?id=<24位随机查询ID>#home`，页面只读取查询 ID 对应的一个
+JSON 分片。当前数据包含 9999 条记录、256 个分片，总大小约 1.07 MB。
+
+生成器位于 `tools/generate_static_records.py`，依赖见
+`tools/requirements.txt`。生成的二维码 ZIP 和编码对应表用于印刷与管理，
+不需要上传到 GitHub Pages。

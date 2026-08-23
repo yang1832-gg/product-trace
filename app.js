@@ -1,7 +1,38 @@
 const ASSETS = "./assets";
-const VIDEO_URL = ["127.0.0.1", "localhost"].includes(window.location.hostname)
+const IS_LOCAL = ["127.0.0.1", "localhost"].includes(window.location.hostname);
+const PRODUCT_VIDEO_URL = IS_LOCAL
   ? `${ASSETS}/videos/brand.mp4`
   : "https://github.com/yang1832-gg/yuntianhua-pages/releases/download/v1.0.0/brand.mp4";
+const ENTERPRISE_VIDEO_URL = IS_LOCAL
+  ? `${ASSETS}/videos/enterprise.mp4`
+  : "https://github.com/yang1832-gg/yuntianhua-pages/releases/download/v2.0.0/enterprise.mp4";
+
+const PRODUCT = {
+  brand: "白鹇",
+  name: "磷酸二铵",
+  technicalIndex: "N+P2O5≥64.0%，配合式：18-46-0",
+  weight: "50 kg",
+  batch: "HL 260503 3D",
+  factory: "云南云天化红磷化工有限公司",
+  address: "云南省红河哈尼族彝族自治州开远市西北路",
+  description: "产品说明：1、适用于各种农作物对氮、磷元素的需求，溶解后固形物较少，促进植物对N、P和微量元素的吸收。2、对水稻、小麦、玉米、高粱、棉花、瓜果、蔬菜等各种粮食作物和经济作物有较好效果；广泛适用于红壤、黄壤、棕壤、黄潮土、黑土、褐土、紫色土、白浆土等种种土壤；尤其适合于我国西北、华北、东北等干旱少雨地区施用。\n产品特点：磷酸二铵是一种高浓度的速效肥料，适用于各种作物和土壤，特别适用于喜氮需磷的作物，作基肥或追肥均可，宜深施。",
+  usage: "可做基肥、追肥，可采用沟施、穴施、撒施等多种方法。建议使用量20-70千克/亩（具体施用量根据作物需求或咨询当地农业部门合理施用）。",
+  caution: "本品存放远离食品和儿童。",
+  spill: "简单清扫堆放，放置到袋内",
+  standard: "GB/T 10205-2009",
+  disposal: "在使用前一定要保持包装袋完好无损，在运输过程中要做好防雨淋，贮存在干燥、通风良好的地方。"
+};
+
+const INITIAL_CERTIFICATION = {
+  code: "805778674236962"
+};
+
+const RECORD_ID = (new URLSearchParams(window.location.search).get("id") || "").trim().toLowerCase();
+const RECORD_ID_PATTERN = /^[a-f0-9]{24}$/;
+let recordLookup = {
+  status: RECORD_ID ? "loading" : "none",
+  record: null
+};
 
 const crops = {
   "水果类": [
@@ -28,12 +59,7 @@ const app = document.querySelector("#app");
 const toast = document.querySelector("#toast");
 const modalRoot = document.querySelector("#modal-root");
 let toastTimer;
-let captcha = createCaptcha();
 let activeCropCategory = "水果类";
-
-function createCaptcha() {
-  return Math.random().toString(36).slice(2, 6).toUpperCase();
-}
 
 function showToast(message) {
   window.clearTimeout(toastTimer);
@@ -44,6 +70,68 @@ function showToast(message) {
 
 function navigate(route) {
   window.location.hash = route;
+}
+
+function certificationStatus() {
+  if (recordLookup.status === "valid") {
+    return {
+      code: recordLookup.record.code
+    };
+  }
+
+  return INITIAL_CERTIFICATION;
+}
+
+function productBatch() {
+  return recordLookup.status === "valid" ? recordLookup.record.batch : PRODUCT.batch;
+}
+
+async function loadStaticRecord() {
+  if (!RECORD_ID) return;
+  if (!RECORD_ID_PATTERN.test(RECORD_ID)) {
+    recordLookup = { status: "invalid", record: null };
+    return;
+  }
+
+  try {
+    const response = await fetch(`${ASSETS}/data/records/${RECORD_ID.slice(0, 2)}.json?v=1`);
+    if (!response.ok) {
+      recordLookup = { status: response.status === 404 ? "invalid" : "error", record: null };
+      return;
+    }
+
+    const records = await response.json();
+    const record = records[RECORD_ID];
+    recordLookup = record
+      ? { status: "valid", record }
+      : { status: "invalid", record: null };
+  } catch {
+    recordLookup = { status: "error", record: null };
+  }
+}
+
+function authenticationStatusMarkup(certification) {
+  if (recordLookup.status === "invalid") {
+    return `
+      <div class="authentication-status authentication-status--error" role="alert">
+        <p class="authentication-status__headline">二维码无效</p>
+        <p>未找到对应的防伪编码，请核对包装上的二维码。</p>
+      </div>`;
+  }
+
+  if (recordLookup.status === "error") {
+    return `
+      <div class="authentication-status authentication-status--error" role="alert">
+        <p class="authentication-status__headline">认证数据加载失败</p>
+        <p>请检查网络后重新扫码或刷新页面。</p>
+      </div>`;
+  }
+
+  return `
+    <div class="authentication-status" aria-label="产品防伪认证信息">
+      <p class="authentication-status__code"><strong>防伪编码：</strong><span>${certification.code}</span></p>
+      <p>该产品已通过防伪中心认证！</p>
+    </div>`;
 }
 
 function brandBanner() {
@@ -64,22 +152,38 @@ function subpageHeader(title) {
 }
 
 function homePage() {
+  const certification = certificationStatus();
+  const batch = productBatch();
   return `
     <div class="page-shell">
       ${brandBanner()}
       <section class="system-zone">
         <div class="system-zone__inner">
           <h1 class="system-title">云天化产品二维码追溯系统</h1>
-          <div class="product-summary">
-            <div class="product-summary__copy">
-              <p class="product-summary__name">云天化正品产品</p>
-              <p class="product-summary__hint">产品详情见包装袋</p>
+          ${authenticationStatusMarkup(certification)}
+          <article class="product-summary">
+            <div class="product-summary__media">
+              <img src="${ASSETS}/images/product-bag.jpg" alt="白鹇牌磷酸二铵肥料包装" />
             </div>
-            <button class="text-link" type="button" data-route="product">点击查看更多...</button>
-          </div>
-          <button class="feature-button" type="button" data-route="zhuli" aria-label="高考助力活动报名入口" style="background-image:url('${ASSETS}/images/enter-bg.png')"></button>
+            <div class="product-summary__details">
+              <p><strong>品牌：</strong><span>${PRODUCT.brand}</span></p>
+              <p><strong>产品名称：</strong><span>${PRODUCT.name}</span></p>
+              <p><strong>主要技术指标：</strong></p>
+              <p class="product-summary__technical">${PRODUCT.technicalIndex}</p>
+              <p><strong>净重：</strong><span>${PRODUCT.weight}</span></p>
+              <p><strong>生产批号/生产日期：</strong></p>
+              <p>${batch}</p>
+              <p><strong>生产商：</strong></p>
+              <p>${PRODUCT.factory}</p>
+              <button class="text-link" type="button" data-route="product">点击查看更多...</button>
+            </div>
+          </article>
         </div>
       </section>
+
+      <div class="feature-wrap">
+        <button class="feature-button" type="button" data-route="zhuli" aria-label="高考助力活动报名入口" style="background-image:url('${ASSETS}/images/enter-bg.png')"></button>
+      </div>
 
       <main class="home-content">
         <div class="tool-grid">
@@ -93,25 +197,21 @@ function homePage() {
           </button>
         </div>
 
-        <button class="inquiry-button" type="button" data-route="inquiry">
-          <span class="inquiry-button__text">真伪查询</span>
-          <span class="search-mark" aria-hidden="true"></span>
-        </button>
-
         <section class="video-section" aria-labelledby="video-title">
           <h2 class="section-heading" id="video-title"><img src="${ASSETS}/images/video-logo.png" alt="" />热点视频</h2>
           <div class="video-card" data-video-card="enterprise">
             <span class="video-card__label">企业宣传视频</span>
             <video controls preload="metadata" playsinline poster="${ASSETS}/images/enterprise-poster.jpg" data-video="enterprise">
-              <source src="${VIDEO_URL}" type="video/mp4" />
+              <source src="${ENTERPRISE_VIDEO_URL}" type="video/mp4" />
             </video>
             <div class="video-error">视频暂时无法加载，请稍后重试。</div>
           </div>
-          <div class="video-card">
+          <div class="video-card" data-video-card="product">
             <span class="video-card__label">产品宣传视频</span>
-            <video controls preload="metadata" playsinline poster="${ASSETS}/images/brand-poster.jpg">
-              <source src="${VIDEO_URL}" type="video/mp4" />
+            <video controls preload="metadata" playsinline poster="${ASSETS}/images/brand-poster.jpg" data-video="product">
+              <source src="${PRODUCT_VIDEO_URL}" type="video/mp4" />
             </video>
+            <div class="video-error">视频暂时无法加载，请稍后重试。</div>
           </div>
         </section>
 
@@ -168,52 +268,56 @@ function cropsPage() {
 }
 
 function productPage() {
+  const batch = productBatch();
   return `
     <div class="page-shell">
       ${subpageHeader("产品详情")}
       <main class="subpage-content product-page">
         <img class="product-page__banner" src="${ASSETS}/images/product-banner.jpg" alt="绿色科技 服务现代农业" />
-        <section class="product-info">
-          <h2>产品详情</h2>
-          <dl>
-            <dt>品牌</dt><dd>云天化</dd>
-            <dt>产品名称</dt><dd>云天化系列肥料</dd>
-            <dt>产品信息</dt><dd>主要技术指标、净重和生产批号以产品包装袋标识为准。</dd>
-            <dt>生产商</dt><dd>云南云天化股份有限公司</dd>
-          </dl>
+        <section class="product-info" aria-label="产品详情">
+          <div class="product-info__field">
+            <h2>品牌：</h2>
+            <p>${PRODUCT.brand}</p>
+          </div>
+          <div class="product-info__field">
+            <h2>产品名称：</h2>
+            <p>${PRODUCT.name}</p>
+          </div>
+          <div class="product-info__field">
+            <h2>主要技术指标：</h2>
+            <p>${PRODUCT.technicalIndex}</p>
+          </div>
+          <div class="product-info__field">
+            <h2>生产批号/生产日期：</h2>
+            <p>${batch}</p>
+          </div>
+          <div class="product-info__field">
+            <h2>生产地址：</h2>
+            <p>${PRODUCT.factory}</p>
+          </div>
+          <div class="product-info__field product-info__description">
+            <h2>产品描述：</h2>
+            <p>${PRODUCT.description.replace("\n", "</p><p>")}</p>
+          </div>
+          <div class="product-info__section">
+            <h2>
+              <svg class="product-info__icon product-info__icon--advice" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              使用建议：
+            </h2>
+            <p>${PRODUCT.usage}</p>
+            <p>注意事项：${PRODUCT.caution}</p>
+          </div>
+          <div class="product-info__section">
+            <h2>
+              <svg class="product-info__icon product-info__icon--other" aria-hidden="true" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+              其他信息：
+            </h2>
+            <p>产品散落物：${PRODUCT.spill}</p>
+            <p>产品的执行标准：${PRODUCT.standard}</p>
+            <p>处置方法：${PRODUCT.disposal}</p>
+          </div>
+          <button class="feedback-button" type="button" data-route="advice">产品质量反馈</button>
         </section>
-        <button class="feedback-button" type="button" data-route="advice">产品质量反馈</button>
-      </main>
-    </div>`;
-}
-
-function inquiryPage() {
-  captcha = createCaptcha();
-  return `
-    <div class="page-shell form-page">
-      ${subpageHeader("真伪查询")}
-      ${brandBanner()}
-      <main class="form-panel">
-        <h2 class="page-title-large">真伪查询</h2>
-        <p class="trace-code-label">追溯码：请输入包装袋追溯码</p>
-        <form id="inquiry-form" novalidate>
-          <div class="field">
-            <label for="trace-code">追溯码</label>
-            <input id="trace-code" name="traceCode" autocomplete="off" placeholder="请输入追溯码" required />
-          </div>
-          <div class="field">
-            <label for="captcha">验证码</label>
-            <div class="captcha-row">
-              <input id="captcha" name="captcha" autocomplete="off" placeholder="请输入验证码" required />
-              <button class="captcha-canvas" type="button" data-action="refresh-captcha" aria-label="更换验证码">${captcha}</button>
-            </div>
-          </div>
-          <button class="primary-button" type="submit">验证</button>
-        </form>
-        <div class="company-contact">
-          <p>公司地址：云南省昆明市滇池路1417号</p>
-          <p>联系方式：400-860-1912</p>
-        </div>
       </main>
     </div>`;
 }
@@ -312,7 +416,6 @@ const routes = {
   home: homePage,
   crops: cropsPage,
   product: productPage,
-  inquiry: inquiryPage,
   advice: advicePage,
   zhuli: zhuliPage
 };
@@ -324,12 +427,11 @@ function render() {
   closeModal();
   window.scrollTo(0, 0);
 
-  const enterpriseVideo = document.querySelector('[data-video="enterprise"]');
-  if (enterpriseVideo) {
-    enterpriseVideo.addEventListener("error", () => {
-      enterpriseVideo.closest(".video-card").classList.add("is-error");
+  document.querySelectorAll("video[data-video]").forEach(video => {
+    video.addEventListener("error", () => {
+      video.closest(".video-card").classList.add("is-error");
     }, { once: true });
-  }
+  });
 
 }
 
@@ -356,11 +458,6 @@ document.addEventListener("click", event => {
     else navigate("home");
   }
 
-  if (action === "refresh-captcha") {
-    captcha = createCaptcha();
-    actionTarget.textContent = captcha;
-  }
-
   if (action === "open-registration") {
     const agreement = document.querySelector("#activity-agreement");
     if (!agreement?.checked) {
@@ -372,9 +469,13 @@ document.addEventListener("click", event => {
 
   if (action === "privacy") privacyModal();
 
-  if (action === "close-modal" && (!event.target.closest("[data-modal-panel]") || event.target.closest(".modal__close"))) {
+  if (action === "close-modal" && (actionTarget.matches("button") || !event.target.closest("[data-modal-panel]"))) {
     closeModal();
   }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && modalRoot.hasChildNodes()) closeModal();
 });
 
 document.addEventListener("submit", event => {
@@ -384,17 +485,6 @@ document.addEventListener("submit", event => {
   if (!form.checkValidity()) {
     form.reportValidity();
     return;
-  }
-
-  if (form.id === "inquiry-form") {
-    const data = new FormData(form);
-    if (String(data.get("captcha")).toUpperCase() !== captcha) {
-      showToast("验证码不正确，请重新输入");
-      captcha = createCaptcha();
-      document.querySelector("[data-action='refresh-captcha']").textContent = captcha;
-      return;
-    }
-    showToast("本地复刻版未连接正式防伪数据库，请以官方查询结果为准");
   }
 
   if (form.id === "advice-form") {
@@ -409,4 +499,17 @@ document.addEventListener("submit", event => {
 });
 
 window.addEventListener("hashchange", render);
-render();
+
+async function initializeApp() {
+  if (RECORD_ID) {
+    app.innerHTML = `
+      <main class="record-loading" role="status" aria-live="polite">
+        <span class="record-loading__spinner" aria-hidden="true"></span>
+        <p>正在验证二维码...</p>
+      </main>`;
+    await loadStaticRecord();
+  }
+  render();
+}
+
+initializeApp();
