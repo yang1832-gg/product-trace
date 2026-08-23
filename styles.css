@@ -820,6 +820,51 @@ video {
   line-height: 1.6;
 }
 
+.success-dialog-backdrop {
+  padding: 20px;
+  place-items: center;
+}
+
+.success-dialog {
+  width: min(600px, 100%);
+  min-height: 142px;
+  padding: 18px 14px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.success-dialog p {
+  margin: 0;
+  color: #111;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.success-dialog__actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.success-dialog__confirm {
+  min-width: 108px;
+  min-height: 58px;
+  padding: 8px 24px;
+  border: 3px solid #0962cc;
+  border-radius: 999px;
+  color: #fff;
+  background: #0962cc;
+  box-shadow: inset 0 0 0 4px #fff;
+  font-size: 18px;
+}
+
+.success-dialog__confirm:focus-visible {
+  outline: none;
+}
+
 .toast {
   position: fixed;
   z-index: 200;
@@ -1087,6 +1132,19 @@ video {
     min-height: 66px;
     margin: 34px 0 48px;
     font-size: 26px;
+  }
+
+  .success-dialog-backdrop {
+    padding: 12px;
+  }
+
+  .success-dialog {
+    min-height: 142px;
+    padding-left: 24px;
+  }
+
+  .success-dialog p {
+    font-size: 18px;
   }
 
   .crop-layout {

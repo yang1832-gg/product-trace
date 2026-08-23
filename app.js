@@ -403,6 +403,19 @@ function privacyModal() {
     </div>`;
 }
 
+function adviceSuccessModal() {
+  modalRoot.innerHTML = `
+    <div class="modal-backdrop success-dialog-backdrop" data-action="close-modal">
+      <section class="success-dialog" role="alertdialog" aria-modal="true" aria-labelledby="advice-success-message" data-modal-panel>
+        <p id="advice-success-message">发送成功，祝您生活愉快！</p>
+        <div class="success-dialog__actions">
+          <button class="success-dialog__confirm" type="button" data-action="close-modal">确定</button>
+        </div>
+      </section>
+    </div>`;
+  document.querySelector(".success-dialog__confirm").focus();
+}
+
 function closeModal() {
   modalRoot.innerHTML = "";
 }
@@ -483,8 +496,8 @@ document.addEventListener("submit", event => {
   }
 
   if (form.id === "advice-form") {
-    showToast("反馈已在本地完成校验，未发送到官方服务器");
     form.reset();
+    adviceSuccessModal();
   }
 
   if (form.id === "registration-form") {
