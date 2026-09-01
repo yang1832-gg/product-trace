@@ -3,19 +3,18 @@ const PRODUCT_VIDEO_URL = `${ASSETS}/videos/brand.mp4`;
 const ENTERPRISE_VIDEO_URL = `${ASSETS}/videos/enterprise.mp4`;
 
 const PRODUCT = {
-  brand: "白鹇",
+  brand: "三环中化",
   name: "磷酸二铵",
-  technicalIndex: "N+P2O5≥64.0%，配合式：18-46-0",
+  technicalIndex: "总养分（N+P2O5）≥64.0%，配合式：18-46-0",
   weight: "50 kg",
-  batch: "HL 260503 3D",
-  factory: "云南云天化红磷化工有限公司",
-  address: "云南省红河哈尼族彝族自治州开远市西北路",
-  description: "产品说明：1、适用于各种农作物对氮、磷元素的需求，溶解后固形物较少，促进植物对N、P和微量元素的吸收。2、对水稻、小麦、玉米、高粱、棉花、瓜果、蔬菜等各种粮食作物和经济作物有较好效果；广泛适用于红壤、黄壤、棕壤、黄潮土、黑土、褐土、紫色土、白浆土等种种土壤；尤其适合于我国西北、华北、东北等干旱少雨地区施用。\n产品特点：磷酸二铵是一种高浓度的速效肥料，适用于各种作物和土壤，特别适用于喜氮需磷的作物，作基肥或追肥均可，宜深施。",
-  usage: "可做基肥、追肥，可采用沟施、穴施、撒施等多种方法。建议使用量20-70千克/亩（具体施用量根据作物需求或咨询当地农业部门合理施用）。",
-  caution: "本品存放远离食品和儿童。",
-  spill: "简单清扫堆放，放置到袋内",
-  standard: "GB/T 10205-2009",
-  disposal: "在使用前一定要保持包装袋完好无损，在运输过程中要做好防雨淋，贮存在干燥、通风良好的地方。"
+  batch: "SZ 260517 2B",
+  factory: "云南三环中化化肥有限公司",
+  address: "云南省昆明市西山区海口工业园区",
+  description: "磷酸二铵，也称作磷酸氢二铵、磷酸氢铵。本色是种乳白色的晶体，分子式为（NH4）2HPO4，溶于水，加热至155℃分解，但在室温下也有可能逐渐地分解放出氨气，而形成磷酸二氢铵，水溶性呈弱碱性，PH8.0。因添加原料不同，所以实物颜色不同，以实物为准。",
+  spill: "简单清扫堆放，放置到袋内。",
+  standard: "GB/T10205-2009",
+  disposal: "在使用前一定要保持包装袋完好无损，运输过程中要做好防雨淋，贮存在干燥、通风良好的地方。",
+  hotline: "800-8895800"
 };
 
 const INITIAL_CERTIFICATION = {
@@ -78,7 +77,7 @@ function certificationStatus() {
 }
 
 function productBatch() {
-  return recordLookup.status === "valid" ? recordLookup.record.batch : PRODUCT.batch;
+  return PRODUCT.batch;
 }
 
 async function loadStaticRecord() {
@@ -158,7 +157,7 @@ function homePage() {
           ${authenticationStatusMarkup(certification)}
           <article class="product-summary">
             <div class="product-summary__media">
-              <img src="${ASSETS}/images/product-bag.jpg" alt="白鹇牌磷酸二铵肥料包装" />
+              <img src="${ASSETS}/images/product-bag.jpg?v=11" alt="三环中化磷酸二铵肥料包装" />
             </div>
             <div class="product-summary__details">
               <p><strong>品牌：</strong><span>${PRODUCT.brand}</span></p>
@@ -299,8 +298,6 @@ function productPage() {
               <svg class="product-info__icon product-info__icon--advice" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
               使用建议：
             </h2>
-            <p>${PRODUCT.usage}</p>
-            <p>注意事项：${PRODUCT.caution}</p>
           </div>
           <div class="product-info__section">
             <h2>
@@ -310,6 +307,7 @@ function productPage() {
             <p>产品散落物：${PRODUCT.spill}</p>
             <p>产品的执行标准：${PRODUCT.standard}</p>
             <p>处置方法：${PRODUCT.disposal}</p>
+            <p>免费服务热线：${PRODUCT.hotline}</p>
           </div>
           <button class="feedback-button" type="button" data-route="advice">产品质量反馈</button>
         </section>
