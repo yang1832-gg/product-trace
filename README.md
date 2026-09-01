@@ -34,7 +34,7 @@ https://<用户名>.github.io/<仓库名>/
 计划使用的中性 GitHub Pages 地址为：
 
 ```text
-https://yang1832-gg.github.io/product-trace/
+https://yang1832-gg.github.io/YF-product-trace/
 ```
 
 二维码链接使用 `?id=<24位随机查询ID>#home`，页面只读取查询 ID 对应的一个
