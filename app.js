@@ -3,12 +3,12 @@ const PRODUCT_VIDEO_URL = `${ASSETS}/videos/brand.mp4`;
 const ENTERPRISE_VIDEO_URL = `${ASSETS}/videos/enterprise.mp4`;
 
 const PRODUCT = {
-  brand: "三环中化",
+  brand: "云峰",
   name: "磷酸二铵",
-  technicalIndex: "总养分（N+P2O5）≥64.0%，配合式：18-46-0",
+  technicalIndex: "N+P2O5≥64.0%，配合式：18-46-0",
   weight: "50 kg",
-  batch: "SZ 260517 2B",
-  factory: "云南三环中化化肥有限公司",
+  batch: "YF 260825 2B",
+  factory: "云南云天化股份有限公司",
   address: "云南省昆明市西山区海口工业园区",
   description: "磷酸二铵，也称作磷酸氢二铵、磷酸氢铵。本色是种乳白色的晶体，分子式为（NH4）2HPO4，溶于水，加热至155℃分解，但在室温下也有可能逐渐地分解放出氨气，而形成磷酸二氢铵，水溶性呈弱碱性，PH8.0。因添加原料不同，所以实物颜色不同，以实物为准。",
   spill: "简单清扫堆放，放置到袋内。",
@@ -157,7 +157,7 @@ function homePage() {
           ${authenticationStatusMarkup(certification)}
           <article class="product-summary">
             <div class="product-summary__media">
-              <img src="${ASSETS}/images/product-bag.jpg?v=11" alt="三环中化磷酸二铵肥料包装" />
+              <img src="${ASSETS}/images/product-bag.jpg?v=12" alt="云峰磷酸二铵肥料包装" />
             </div>
             <div class="product-summary__details">
               <p><strong>品牌：</strong><span>${PRODUCT.brand}</span></p>
