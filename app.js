@@ -298,6 +298,8 @@ function productPage() {
               <svg class="product-info__icon product-info__icon--advice" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
               使用建议：
             </h2>
+            <p>用法用量：可做基肥、追肥，可采用沟施、穴施、撒施等多种方法。建议使用量20-70千克/亩（具体施用量根据作物需求或咨询当地农业部门合理施用）。</p>
+            <p>注意事项：本品存放远离食品和儿童。</p>
           </div>
           <div class="product-info__section">
             <h2>
