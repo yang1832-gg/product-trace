@@ -3,13 +3,13 @@ const PRODUCT_VIDEO_URL = `${ASSETS}/videos/brand.mp4`;
 const ENTERPRISE_VIDEO_URL = `${ASSETS}/videos/enterprise.mp4`;
 
 const PRODUCT = {
-  brand: "云峰",
+  brand: "白鹇",
   name: "磷酸二铵",
   technicalIndex: "N+P2O5≥64.0%，配合式：18-46-0",
   weight: "50 kg",
-  batch: "YF 260825 2B",
-  factory: "云南云天化股份有限公司",
-  address: "云南省昆明市西山区海口工业园区",
+  batch: "HL 260811 2D",
+  factory: "云南云天化红磷化工有限公司",
+  address: "云南省昆明市东川区因民镇1417号",
   description: "磷酸二铵，也称作磷酸氢二铵、磷酸氢铵。本色是种乳白色的晶体，分子式为（NH4）2HPO4，溶于水，加热至155℃分解，但在室温下也有可能逐渐地分解放出氨气，而形成磷酸二氢铵，水溶性呈弱碱性，PH8.0。因添加原料不同，所以实物颜色不同，以实物为准。",
   spill: "简单清扫堆放，放置到袋内。",
   standard: "GB/T10205-2009",
@@ -161,7 +161,7 @@ function homePage() {
           ${authenticationStatusMarkup(certification)}
           <article class="product-summary">
             <div class="product-summary__media">
-              <img src="${ASSETS}/images/product-bag.jpg?v=12" alt="云峰磷酸二铵肥料包装" />
+              <img src="${ASSETS}/images/product-bag-baixian.jpg?v=1" alt="白鹇磷酸二铵肥料包装" />
             </div>
             <div class="product-summary__details">
               <p><strong>品牌：</strong><span>${PRODUCT.brand}</span></p>
@@ -290,7 +290,7 @@ function productPage() {
             <p>${batch}</p>
           </div>
           <div class="product-info__field">
-            <h2>生产地址：</h2>
+            <h2>生产商：</h2>
             <p>${PRODUCT.factory}</p>
           </div>
           <div class="product-info__field product-info__description">
