@@ -77,6 +77,10 @@ function certificationStatus() {
 }
 
 function productBatch() {
+  if (recordLookup.status === "valid" && recordLookup.record?.batch) {
+    return recordLookup.record.batch;
+  }
+
   return PRODUCT.batch;
 }
 
